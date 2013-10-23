@@ -21,6 +21,7 @@ class Goods
 
 	def tax
 		rate = tax_rate()
+		@tax = (rate*@price/100).round(-1)
 	end
 end
 
@@ -50,4 +51,4 @@ input3.each do |item, price|
 	counter += 1
 end
 
-puts list.each {|x| x.tax_rate}
+puts list.each {|x| x.tax}
