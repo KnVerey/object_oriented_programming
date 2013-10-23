@@ -5,6 +5,19 @@ class Goods
 	def initialize(item, price)
 		@item = item
 		@price = price
+		@tax = 0
+	end
+
+	def tax_rate
+		exempted = ["book", "chocolate", "pill"]
+
+		if exempted.any? {|exi| @item.include?(exi)}
+			puts "I'm exempt"
+		end
+	end
+
+	def tax
+		tax_rate
 	end
 end
 
@@ -30,8 +43,8 @@ input1 = {
 list = []
 counter = 0
 input1.each do |item, price|
-	list[counter] = Goods.new(item, price)
+	list[counter] = Goods.new(item, (price*100).to_i)
 	counter += 1
 end
 
-puts list
+puts list.each {|x| x.tax_rate}
