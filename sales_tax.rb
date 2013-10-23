@@ -5,6 +5,7 @@ class Goods
 	def initialize(item, price)
 		@item = item
 		@price = price
+		@tax = tax()
 	end
 
 	def tax_rate
@@ -21,7 +22,11 @@ class Goods
 
 	def tax
 		rate = tax_rate()
-		@tax = (rate*@price/100).round(-1)
+		return (rate*@price/100).round(-1)
+	end
+
+	def receipt
+		puts "#{@item}:\t\t#{(@price.to_f+@tax.to_f)/100}"
 	end
 end
 
@@ -51,4 +56,4 @@ input3.each do |item, price|
 	counter += 1
 end
 
-puts list.each {|x| x.tax}
+list.each {|x| x.receipt}
