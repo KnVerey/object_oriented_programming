@@ -1,7 +1,10 @@
 class Person
 	attr_accessor :name
-end
 
+	def greeting
+		puts "Hi, my name is #{@name}"
+	end
+end
 
 class Student < Person
 	def learn
@@ -14,3 +17,11 @@ class Instructor < Person
 		puts "Everything in Ruby is an Object."
 	end
 end
+
+chris = Instructor.new
+chris.name = "Chris"
+chris.greeting
+
+christina = Student.new
+christina.name = "Christina"
+christina.greeting
