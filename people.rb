@@ -25,3 +25,8 @@ chris.greeting
 christina = Student.new
 christina.name = "Christina"
 christina.greeting
+
+chris.teach
+christina.learn
+
+christina.teach #undefined method error because the teach method is outside the scope of the Student class 
