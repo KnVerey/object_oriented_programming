@@ -1,13 +1,13 @@
 class Excursion	
-	attr_accessor :plateau, :rovers, :num_rovers
+	attr_accessor :plateau, :squad, :num_rovers
 
 	def initialize(array)
 		create_grid(array.shift)
-		@rovers = []
+		@squad = []
 		@num_rovers = 0
 
 		array.each do |rover_data| 
-			@rovers[@num_rovers] = Rover.new(rover_data)
+			@squad[@num_rovers] = Rover.new(rover_data)
 			@num_rovers +=1
 		end
 	end
@@ -15,7 +15,7 @@ class Excursion
 	def go
 		@num_rovers.times do |num|
 			puts "Here's rover number #{num+1}!"
-			move_rover(@rovers[num-1])
+			move_rover(@squad[num-1])
 		end
 
 	end
@@ -37,12 +37,14 @@ class Excursion
 		end
 	end
 
-	def place_rover
-
-	end
-
 	def move_rover(rover)
-		puts "I will move!"
+		puts rover.instructions
+
+		while rover.instructions != ""
+			move = rover.instructions.slice!(0)
+
+
+		end
 	end
 
 end
@@ -51,8 +53,8 @@ class Rover
 	attr_accessor :x, :y, :heading, :instructions
 	
 	def initialize(rover_data)
-		@x = (rover_data[0][0]).to_i
-		@y = (rover_data[0][1]).to_i
+		@x = (rover_data[0][0])
+		@y = (rover_data[0][1])
 		@heading = rover_data[0][2]
 		@instructions = rover_data[1]
 	end
@@ -60,8 +62,8 @@ end
 
 
 input = [[5,5],
-	[[1,2,"N"], ["LMLMLMLMM"]], 
-	[[3,3,"E"], ["MMRMMRMRRM"]]]
+	[[1,2,"N"], "LMLMLMLMM"], 
+	[[3,3,"E"], "MMRMMRMRRM"]]
 
 
 mission = Excursion.new(input)
