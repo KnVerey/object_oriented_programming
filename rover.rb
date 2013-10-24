@@ -1,6 +1,4 @@
 class Location
-	attr_accessor :plateau
-
 	def initialize(coordinates)
 		@plateau = []
 		
@@ -21,31 +19,27 @@ end
 
 
 class Excursion	
-	attr_accessor :squad, :num_rovers, :grid
-
 	def initialize(array)
 		@grid = Location.new(array.shift)
 		@squad = []
 		@num_rovers = 0
 
-		array.each do |rover_data| 
+		array.each do |rover_data|
 			@squad[@num_rovers] = Rover.new(rover_data)
 			@num_rovers +=1
 		end
 	end
 
 	def go
-		@num_rovers.times do |num|
+		0.upto(@num_rovers-1) do |num|
 			puts "Here's rover number #{num+1}!"
-			instr_rover(@squad[num-1])
-			@squad[num-1].print_location
+			instr_rover(@squad[num])
 		end
 	end
 
 	def instr_rover(rover)
 		until rover.instructions == ""
 			instr = rover.instructions.slice!(0)
-
 			if instr == "R" || instr == "L"
 				rover.turn(instr)
 			elsif instr=="M"
@@ -63,8 +57,8 @@ class Rover
 	attr_accessor :x, :y, :heading, :instructions
 	
 	def initialize(rover_data)
-		@x = (rover_data[0][0])
-		@y = (rover_data[0][1])
+		@x = rover_data[0][0]
+		@y = rover_data[0][1]
 		@heading = rover_data[0][2]
 		@instructions = rover_data[1]
 	end
@@ -81,6 +75,7 @@ class Rover
  			@heading = "E" if @heading == "S"
  			@heading = "S" if @heading == "W"
 		end
+		#print_location
 	end
 
 	def move()
@@ -88,6 +83,7 @@ class Rover
 		@x += 1 if @heading == "E"
 		@y -= 1 if @heading == "S"
 		@x -= 1 if @heading == "W"
+		#print_location
 	end
 
 	def print_location
