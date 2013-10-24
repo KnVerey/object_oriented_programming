@@ -1,18 +1,19 @@
-#Some of the rounding output doesn't 100% match the solution
-
+#Some of the rounding output doesn't 100% match the solution: forgot not to round values that are already at 5
+#Add formatting method
+#use class method to track the total tax and price?
 
 class Bill
 	attr_accessor :products, :total_tax
 	
 	def initialize(input)
-		@products = []
+		@products= []
 		counter = 0
 		input.each do |name, price, quantity|
-			@products[counter] = Item.new(name, (price*100).to_i, quantity)
+			@products[counter] = Item.new(name, price, quantity)
 			counter += 1
 		end
 
-		@total_tax = sum_tax()
+		@total_tax= sum_tax()
 	end
 
 	def sum_tax
@@ -36,13 +37,13 @@ class Bill
 end	
 
 
-class Item < Bill
+class Item
 	attr_accessor :name, :price, :quantity, :tax
 
 	def initialize(name, price, quantity)
 		@name = name
-		@price = price
-		@quantity = quantity
+		@price = (price*100).to_i
+		@quantity = quantity.to_i
 		@tax = tax()
 	end
 
@@ -60,13 +61,17 @@ class Item < Bill
 		end
 	end
 
+	def tax_round(unrounded)
+		return unrounded if unrounded%5==0
+		(unrounded - unrounded%5) + 5
+	end
+
 	def tax
-		rate = tax_rate()
-		return (rate*@quantity*@price/100).round(-1)
+		tax_round(tax_rate*@price/100)
 	end
 
 	def print_item
-		puts "#{@quantity} #{@name}: $#{'%.2f' % ((@price.to_f*quantity+@tax.to_f)/100)}"
+		puts "#{@quantity} #{@name}: $#{'%.2f' % (((@price+@tax)*@quantity).to_f/100)}"
 	end
 
 end
@@ -74,7 +79,7 @@ end
 
 input1 = [
 	["book", 12.49, 1],
-	["music", 14.99, 1],
+	["music CD", 14.99, 1],
 	["chocolate bar", 0.85, 1]
 ]
 
