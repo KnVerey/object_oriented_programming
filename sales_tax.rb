@@ -11,10 +11,12 @@ class Goods
 	def tax_rate
 		exempted = ["book", "chocolate", "pill"]
 
-		if @item.include?("imported")
-			return 15
+		if @item.include?("imported") && exempted.any? {|exi| @item.include?(exi)}
+			return 5
 		elsif exempted.any? {|exi| @item.include?(exi)}
 			return 0
+		elsif @item.include?("imported")
+			return 15
 		else
 			return 10
 		end
@@ -26,7 +28,7 @@ class Goods
 	end
 
 	def receipt
-		puts "#{@item}:\t\t#{(@price.to_f+@tax.to_f)/100}"
+		puts "#{@item}: #{(@price.to_f+@tax.to_f)/100}"
 	end
 end
 
