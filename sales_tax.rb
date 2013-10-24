@@ -1,5 +1,4 @@
-#Some of the rounding output doesn't 100% match the solution: forgot not to round values that are already at 5
-#Add formatting method
+#One of the results for input 3 is off by 1 cent
 #use class method to track the total tax and price?
 
 class Bill
@@ -28,10 +27,14 @@ class Bill
 		@products.each {|item| item.print_item}
 	end
 
+	def monitize(num)
+		"$" + ('%.2f' % num)
+	end
+
 	def print_receipt
 		print_all_items()
-		puts "Sales Taxes: $#{'%.2f' % @total_tax}"
-		puts "Total: $#{'%.2f' % sum_total}"
+		puts "Sales Taxes: #{monitize(@total_tax)}"
+		puts "Total: #{monitize(sum_total)}"
 	end
 
 end	
@@ -63,7 +66,7 @@ class Item
 
 	def tax_round(unrounded)
 		return unrounded if unrounded%5==0
-		(unrounded - unrounded%5) + 5
+		unrounded - unrounded%5 + 5
 	end
 
 	def tax
