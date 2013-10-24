@@ -6,6 +6,7 @@ module Formatting
 	end
 end
 
+
 class Receipt
 	include Formatting
 	attr_accessor :products, :total_price, :total_tax, :num_items
