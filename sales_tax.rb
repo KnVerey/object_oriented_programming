@@ -1,53 +1,53 @@
 #One of the results for input 3 is off by 1 cent
 #use class method to track the total tax and price?
 
+module Formatting
+	def self.monetize(num)
+		"$" + ('%.2f' % (num.to_f/100))
+	end
+end
+
 class Receipt
-	attr_accessor :products, :total_tax
-	
+	include Formatting
+	attr_accessor :products, :total_price, :total_tax, :num_items
+
 	def initialize(input)
-		@products= []
-		counter = 0
+		@total_price = 0
+		@total_tax = 0
+		@num_items = 0 
+
+		@products = []
 		input.each do |name, price, quantity|
-			@products[counter] = Item.new(name, price, quantity)
-			counter += 1
+			@products[@num_items] = Item.new(name, price, quantity)
+			@total_price += @products[@num_items].total
+			@total_tax += @products[@num_items].tax
+			@num_items += 1
 		end
-
-		@total_tax= sum_tax()
-	end
-
-	def sum_tax
-		@products.inject(0) {|sum, item| sum+item.tax}.to_f/100
-	end
-
-	def sum_total
-		(@products.inject(0)	{|sum, item| sum+item.price}.to_f/100) + @total_tax
 	end
 
 	def print_all_items
 		@products.each {|item| item.print_item}
 	end
 
-	def monitize(num)
-		"$" + ('%.2f' % num)
-	end
-
 	def print_receipt
 		print_all_items()
-		puts "Sales Taxes: #{monitize(@total_tax)}"
-		puts "Total: #{monitize(sum_total)}"
+		puts "Sales Taxes: #{Formatting::monetize(@total_tax)}"
+		puts "Total: #{Formatting::monetize(@total_price)}"
 	end
 
 end	
 
 
 class Item
-	attr_accessor :name, :price, :quantity, :tax
+	include Formatting
+	attr_accessor :name, :price, :quantity, :tax, :total
 
 	def initialize(name, price, quantity)
 		@name = name
 		@price = (price*100).to_i
 		@quantity = quantity.to_i
 		@tax = tax()
+		@total = (@price + @tax) * @quantity
 	end
 
 	def tax_rate
@@ -74,28 +74,28 @@ class Item
 	end
 
 	def print_item
-		puts "#{@quantity} #{@name}: $#{'%.2f' % (((@price+@tax)*@quantity).to_f/100)}"
+		puts "#{@quantity} #{@name}: #{Formatting::monetize(@total)}"
 	end
 
 end
 
-class Imported < Item
-	def tax_rate
-		super + 5
-	end
-end
+# class Imported < Item
+# 	def tax_rate
+# 		super + 5
+# 	end
+# end
 
-class Exempt < Item
-	def tax_rate
-		0
-	end
-end
+# class Exempt < Item
+# 	def tax_rate
+# 		0
+# 	end
+# end
 
-class ImportedExempt < Exempt
-	def tax_rate
-		super + 10
-	end
-end
+# class ImportedExempt < Exempt
+# 	def tax_rate
+# 		super + 10
+# 	end
+# end
 
 input1 = [
 	["book", 12.49, 1],
