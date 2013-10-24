@@ -1,7 +1,7 @@
 #One of the results for input 3 is off by 1 cent
 #use class method to track the total tax and price?
 
-class Bill
+class Receipt
 	attr_accessor :products, :total_tax
 	
 	def initialize(input)
@@ -79,6 +79,23 @@ class Item
 
 end
 
+class Imported < Item
+	def tax_rate
+		super + 5
+	end
+end
+
+class Exempt < Item
+	def tax_rate
+		0
+	end
+end
+
+class ImportedExempt < Exempt
+	def tax_rate
+		super + 10
+	end
+end
 
 input1 = [
 	["book", 12.49, 1],
@@ -98,11 +115,11 @@ input3 = [
 	["box of imported chocolates", 11.25, 1]
 ]
 
-puts "\nBill 1:"
-Bill.new(input1).print_receipt
+puts "\nReceipt 1:"
+Receipt.new(input1).print_receipt
 
-puts "\nBill 2:"
-Bill.new(input2).print_receipt
+puts "\nReceipt 2:"
+Receipt.new(input2).print_receipt
 
-puts "\nBill 3:"
-Bill.new(input3).print_receipt
+puts "\nReceipt 3:"
+Receipt.new(input3).print_receipt
