@@ -1,5 +1,4 @@
 #Some of the rounding output doesn't 100% match the solution
-#The trailing zero isn't displaying.
 
 
 class Bill
@@ -30,8 +29,8 @@ class Bill
 
 	def print_receipt
 		print_all_items()
-		puts "Sales Taxes: $#{@total_tax}"
-		puts "Total: $#{sum_total}"
+		puts "Sales Taxes: $#{'%.2f' % @total_tax}"
+		puts "Total: $#{'%.2f' % sum_total}"
 	end
 
 end	
@@ -67,7 +66,7 @@ class Item < Bill
 	end
 
 	def print_item
-		puts "#{@quantity} #{@name}: $#{(@price.to_f*quantity+@tax.to_f)/100}"
+		puts "#{@quantity} #{@name}: $#{'%.2f' % ((@price.to_f*quantity+@tax.to_f)/100)}"
 	end
 
 end
