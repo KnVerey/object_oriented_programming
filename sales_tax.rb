@@ -1,3 +1,6 @@
+#Some of the rounding output doesn't 100% match the solution
+#The trailing zero isn't displaying.
+
 
 class Bill
 	attr_accessor :products, :total_tax
@@ -21,8 +24,12 @@ class Bill
 		(@products.inject(0)	{|sum, item| sum+item.price}.to_f/100) + @total_tax
 	end
 
-	def print_receipt
+	def print_all_items
 		@products.each {|item| item.print_item}
+	end
+
+	def print_receipt
+		print_all_items()
 		puts "Sales Taxes: $#{@total_tax}"
 		puts "Total: $#{sum_total}"
 	end
