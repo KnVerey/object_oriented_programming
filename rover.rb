@@ -1,8 +1,30 @@
+class Location
+	attr_accessor :plateau
+
+	def initialize(coordinates)
+		@plateau = []
+		
+		coordinates[0].times do |rows|
+			row = []
+			coordinates[1].times {|columns| row << "x"}
+ 			@plateau << row
+		end
+	end
+
+	def print_grid
+		@plateau.each do |rows|
+			rows.each {|spot| print spot + "  "}
+			puts
+		end
+	end
+end
+
+
 class Excursion	
-	attr_accessor :plateau, :squad, :num_rovers
+	attr_accessor :squad, :num_rovers, :grid
 
 	def initialize(array)
-		create_grid(array.shift)
+		@grid = Location.new(array.shift)
 		@squad = []
 		@num_rovers = 0
 
@@ -20,52 +42,14 @@ class Excursion
 		end
 	end
 
-	def create_grid(coordinates)
-		@plateau = []
-		
-		coordinates[0].times do |rows|
-			row = []
-			coordinates[1].times {|columns| row << "x"}
- 			@plateau << row
-		end
-	end
-
-	def print_grid
-		@plateau.each do |rows|
-			rows.each {|spot| print spot + "  "}
-			puts
-		end
-	end
-
-	def turn(rover, instr)
-		if instr == "R" 
- 			rover.heading = "E" if rover.heading == "N"
- 			rover.heading = "S" if rover.heading == "E"
- 			rover.heading = "W" if rover.heading == "S"
- 			rover.heading = "N" if rover.heading == "W"
- 		elsif instr == "L"
- 			rover.heading = "W" if rover.heading == "N"
- 			rover.heading = "N" if rover.heading == "E"
- 			rover.heading = "E" if rover.heading == "S"
- 			rover.heading = "S" if rover.heading == "W"
-		end
-	end
-
-	def move(rover)
-		rover.y += 1 if rover.heading == "N"
-		rover.x += 1 if rover.heading == "E"
-		rover.y -= 1 if rover.heading == "S"
-		rover.x -= 1 if rover.heading == "W"
-	end
-
 	def instr_rover(rover)
 		until rover.instructions == ""
 			instr = rover.instructions.slice!(0)
 
 			if instr == "R" || instr == "L"
-				turn(rover, instr)
+				rover.turn(instr)
 			elsif instr=="M"
-				move(rover)
+				rover.move()
 			else
 				puts "Invalid instructions! Abort!"
 				break
@@ -83,6 +67,27 @@ class Rover
 		@y = (rover_data[0][1])
 		@heading = rover_data[0][2]
 		@instructions = rover_data[1]
+	end
+
+	def turn(instr)
+		if instr == "R" 
+ 			@heading = "E" if @heading == "N"
+ 			@heading = "S" if @heading == "E"
+ 			@heading = "W" if @heading == "S"
+ 			@heading = "N" if @heading == "W"
+ 		elsif instr == "L"
+ 			@heading = "W" if @heading == "N"
+ 			@heading = "N" if @heading == "E"
+ 			@heading = "E" if @heading == "S"
+ 			@heading = "S" if @heading == "W"
+		end
+	end
+
+	def move()
+		@y += 1 if @heading == "N"
+		@x += 1 if @heading == "E"
+		@y -= 1 if @heading == "S"
+		@x -= 1 if @heading == "W"
 	end
 
 	def print_location
