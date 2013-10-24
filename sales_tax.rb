@@ -1,5 +1,3 @@
-#One of the results for input 3 is off by 1 cent
-
 module Formatting
 	def self.monetize(num)
 		"$" + ('%.2f' % (num.to_f/100))
@@ -44,7 +42,7 @@ class Item
 
 	def initialize(name, price, quantity)
 		@name = name
-		@price = (price*100).to_i
+		@price = (price*100).ceil
 		@quantity = quantity.to_i
 		@tax = tax()
 		@total = (@price + @tax) * @quantity
@@ -61,23 +59,23 @@ class Item
 
 	def tax_rate
  		if is_imported? && is_tax_exempt?
-			return 5
+			return 0.05
 		elsif is_tax_exempt?
 			return 0
 		elsif is_imported?
-			return 15
+			return 0.15
 		else
-			return 10
+			return 0.10
 		end
 	end
 
 	def tax_round(unrounded)
 		return unrounded if unrounded%5==0
-		unrounded - unrounded%5 + 5
+		(unrounded - unrounded%5 + 5)
 	end
 
 	def tax
-		tax_round(tax_rate*@price/100)
+		tax_round((tax_rate*@price)).to_i
 	end
 
 	def print_item
@@ -85,24 +83,6 @@ class Item
 	end
 
 end
-
-# class Imported < Item
-# 	def tax_rate
-# 		super + 5
-# 	end
-# end
-
-# class Exempt < Item
-# 	def tax_rate
-# 		0
-# 	end
-# end
-
-# class ImportedExempt < Exempt
-# 	def tax_rate
-# 		super + 10
-# 	end
-# end
 
 input1 = [
 	["book", 12.49, 1],
