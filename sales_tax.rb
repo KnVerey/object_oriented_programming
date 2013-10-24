@@ -1,5 +1,4 @@
 #One of the results for input 3 is off by 1 cent
-#use class method to track the total tax and price?
 
 module Formatting
 	def self.monetize(num)
@@ -50,14 +49,21 @@ class Item
 		@total = (@price + @tax) * @quantity
 	end
 
-	def tax_rate
+	def is_tax_exempt?
 		exempted = ["book", "chocolate", "pill"]
+ 		exempted.any? {|exi| @name.include?(exi)}
+	end
 
-		if @name.include?("imported") && exempted.any? {|exi| @name.include?(exi)}
+	def is_imported?
+		@name.include?("imported")
+	end
+
+	def tax_rate
+ 		if is_imported? && is_tax_exempt?
 			return 5
-		elsif exempted.any? {|exi| @name.include?(exi)}
+		elsif is_tax_exempt?
 			return 0
-		elsif @name.include?("imported")
+		elsif is_imported?
 			return 15
 		else
 			return 10
