@@ -34,6 +34,7 @@ class Excursion
 		0.upto(@num_rovers-1) do |num|
 			puts "Here's rover number #{num+1}!"
 			instr_rover(@squad[num])
+			@squad[num].print_location			
 		end
 	end
 
@@ -65,17 +66,29 @@ class Rover
 
 	def turn(instr)
 		if instr == "R" 
- 			@heading = "E" if @heading == "N"
- 			@heading = "S" if @heading == "E"
- 			@heading = "W" if @heading == "S"
- 			@heading = "N" if @heading == "W"
+	 		case @heading
+			when "N"
+				@heading = "E" 
+			when "E"
+				@heading = "S" 
+			when "S"
+				@heading = "W" 
+			when "W"
+				@heading = "N" 
+			end
+
  		elsif instr == "L"
- 			@heading = "W" if @heading == "N"
- 			@heading = "N" if @heading == "E"
- 			@heading = "E" if @heading == "S"
- 			@heading = "S" if @heading == "W"
+ 			case @heading
+ 			when "N"
+ 				@heading = "W"
+ 			when "E"
+ 				@heading = "N"
+ 			when "S"
+ 				@heading = "E"
+ 			when "W"
+ 				@heading = "S"
+ 			end
 		end
-		#print_location
 	end
 
 	def move()
@@ -83,7 +96,6 @@ class Rover
 		@x += 1 if @heading == "E"
 		@y -= 1 if @heading == "S"
 		@x -= 1 if @heading == "W"
-		#print_location
 	end
 
 	def print_location
