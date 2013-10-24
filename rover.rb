@@ -10,12 +10,14 @@ class Excursion
 			@rovers[@num_rovers] = Rover.new(rover_data)
 			@num_rovers +=1
 		end
-		
-		place_rover
 	end
 
-	def print_location
-		
+	def go
+		@num_rovers.times do |num|
+			puts "Here's rover number #{num+1}!"
+			move_rover(@rovers[num-1])
+		end
+
 	end
 
 	def create_grid(coordinates)
@@ -36,8 +38,11 @@ class Excursion
 	end
 
 	def place_rover
-		
-		@plateau[@rovers[0].x, @rovers[1].y]	#ONLY WORKS FOR SPEC ROVER
+
+	end
+
+	def move_rover(rover)
+		puts "I will move!"
 	end
 
 end
@@ -54,11 +59,10 @@ class Rover
 end
 
 
-
 input = [[5,5],
 	[[1,2,"N"], ["LMLMLMLMM"]], 
 	[[3,3,"E"], ["MMRMMRMRRM"]]]
 
 
 mission = Excursion.new(input)
-mission.print_grid
+mission.go
