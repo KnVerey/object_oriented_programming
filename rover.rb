@@ -2,9 +2,9 @@ class Location
 	def initialize(coordinates)
 		@plateau = []
 		
-		coordinates[0].times do |rows|
+		(coordinates[0]+1).times do |rows|
 			row = []
-			coordinates[1].times {|columns| row << "x"}
+			(coordinates[1]+1).times {|columns| row << "·"}
  			@plateau << row
 		end
 	end
@@ -14,6 +14,10 @@ class Location
 			rows.each {|spot| print spot + "  "}
 			puts
 		end
+	end
+
+	def record_position(x,y,heading)
+		@plateau[x][y] = "O"
 	end
 end
 
@@ -32,9 +36,13 @@ class Excursion
 
 	def go
 		0.upto(@num_rovers-1) do |num|
-			puts "Here's rover number #{num+1}!"
-			instr_rover(@squad[num])
-			@squad[num].print_location			
+			current_rover=@squad[num]
+			@grid.record_position(current_rover.x, current_rover.y, current_rover.heading)
+
+			print "Rover #{num+1} stopped here: "
+			instr_rover(current_rover)
+			current_rover.print_location
+			@grid.print_grid			
 		end
 	end
 
@@ -49,6 +57,7 @@ class Excursion
 				puts "Invalid instructions! Abort!"
 				break
 			end
+			@grid.record_position(rover.x, rover.y, current_rover.heading)
 		end
 	end
 
@@ -91,7 +100,7 @@ class Rover
 		end
 	end
 
-	def move()
+	def move
 		@y += 1 if @heading == "N"
 		@x += 1 if @heading == "E"
 		@y -= 1 if @heading == "S"
