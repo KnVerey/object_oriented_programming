@@ -1,5 +1,5 @@
 class Location
-	attr_accessor :plateau
+	attr_reader :plateau
 
 	def initialize(coordinates)
 		@x_size = coordinates[0]
@@ -14,8 +14,8 @@ class Location
 	end
 
 	def print_grid
-		puts "* appears before starting point and after stop point"
-		puts "Actions occurring in a single location are listed left to right\n"
+		puts "\nMAP: '*' appears before starting point and after stop point."
+		puts "Actions occurring in a single location are listed left to right.\n"
 		@x_size.downto(0) do |row_no|
 			0.upto(@y_size) do |column_no|
 				print @plateau[column_no][row_no] + "\t\t"
@@ -46,7 +46,7 @@ class Excursion
 			current_rover.mark_start(@grid)
 
 			instr_rover(current_rover)
-			puts "Rover #{num+1} stopped at #{current_rover.location}."
+			puts "\nRover #{num+1} stopped at #{current_rover.location}."
 			current_rover.mark_end(@grid)
 		end
 			@grid.print_grid			
@@ -70,7 +70,8 @@ class Excursion
 end
 
 class Rover
-	attr_accessor :x, :y, :heading, :instructions
+	attr_accessor :instructions
+	attr_reader :x, :y, :heading
 	
 	def initialize(rover_data, num)
 		@x = rover_data[0][0]
@@ -149,6 +150,4 @@ input = [[5,5],
 	[[1,2,"N"], "LMLMLMLMM"], 
 	[[3,3,"E"], "MMRMMRMRRM"]]
 
-
-mission = Excursion.new(input)
-mission.go
+Excursion.new(input).go
