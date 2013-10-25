@@ -2,20 +2,27 @@ class Location
 	attr_accessor :plateau
 
 	def initialize(coordinates)
+		@x_size = coordinates[0]
+		@y_size = coordinates[1]
 		@plateau = []
 		
-		(coordinates[0]+1).times do |rows|
+		(@x_size+1).times do |rows|
 			row = []
-			(coordinates[1]+1).times {|columns| row << "·"}
+			(@y_size+1).times {|columns| row << "·"}
  			@plateau << row
 		end
 	end
 
 	def print_grid
-		@plateau.each do |rows|
-			rows.each {|spot| print spot + "\t"}
-			puts
+		puts "* appears before starting point and after stop point"
+		puts "Actions occurring in a single location are listed left to right\n"
+		@x_size.downto(0) do |row_no|
+			0.upto(@y_size) do |column_no|
+				print @plateau[column_no][row_no] + "\t\t"
+			end
+			puts "\n\n"
 		end
+
 	end
 end
 
@@ -36,12 +43,13 @@ class Excursion
 		0.upto(@num_rovers-1) do |num|
 			current_rover=@squad[num]
 			current_rover.record_position(@grid)
+			current_rover.mark_start(@grid)
 
-			print "Rover #{num+1} stopped here: "
 			instr_rover(current_rover)
-			current_rover.print_location
-			@grid.print_grid			
+			puts "Rover #{num+1} stopped at #{current_rover.location}."
+			current_rover.mark_end(@grid)
 		end
+			@grid.print_grid			
 	end
 
 	def instr_rover(rover)
@@ -106,8 +114,8 @@ class Rover
 		@x -= 1 if @heading == "W"
 	end
 
-	def print_location
-		puts @x.to_s + " " + @y.to_s + " " + @heading
+	def location
+		@x.to_s + " " + @y.to_s + " " + @heading
 	end
 
 	def choose_arrow
@@ -118,7 +126,21 @@ class Rover
 	end
 
 	def record_position(grid)
-		grid.plateau[x][y] = @rover_num.to_s + choose_arrow 
+		position = grid.plateau[x][y]
+		new_value = @rover_num.to_s + choose_arrow 
+		if position == "·"
+			position.replace new_value
+		else
+			position << new_value
+		end
+	end
+
+	def mark_start(grid)
+		grid.plateau[x][y].insert(0,"*")
+	end
+
+	def mark_end(grid)
+		grid.plateau[x][y].insert(-1,"*")
 	end
 end
 
