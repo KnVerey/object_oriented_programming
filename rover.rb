@@ -16,8 +16,11 @@ class Location
 		end
 	end
 
-	def record_position(x,y,heading)
-		@plateau[x][y] = "O"
+	def record_position(x,y,heading,rover)
+		(@plateau[x][y] = "→") if heading=="E"
+		(@plateau[x][y] = "←") if heading=="W"
+		(@plateau[x][y] = "↑") if heading=="N"
+		(@plateau[x][y] = "↓") if heading=="S"
 	end
 end
 
@@ -37,7 +40,7 @@ class Excursion
 	def go
 		0.upto(@num_rovers-1) do |num|
 			current_rover=@squad[num]
-			@grid.record_position(current_rover.x, current_rover.y, current_rover.heading)
+			@grid.record_position(current_rover.x, current_rover.y, current_rover.heading, num)
 
 			print "Rover #{num+1} stopped here: "
 			instr_rover(current_rover)
@@ -57,7 +60,7 @@ class Excursion
 				puts "Invalid instructions! Abort!"
 				break
 			end
-			@grid.record_position(rover.x, rover.y, current_rover.heading)
+			@grid.record_position(rover.x, rover.y, rover.heading)
 		end
 	end
 
