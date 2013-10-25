@@ -13,7 +13,7 @@ class Location
 
 	def print_grid
 		@plateau.each do |rows|
-			rows.each {|spot| print spot + "  "}
+			rows.each {|spot| print spot + "\t"}
 			puts
 		end
 	end
@@ -110,11 +110,15 @@ class Rover
 		puts @x.to_s + " " + @y.to_s + " " + @heading
 	end
 
+	def choose_arrow
+		return "→" if @heading=="E"
+		return "←" if @heading=="W"
+		return "↑" if @heading=="N"
+		return "↓" if @heading=="S"
+	end
+
 	def record_position(grid)
-		(grid.plateau[x][y] = "→") if @heading=="E"
-		(grid.plateau[x][y] = "←") if @heading=="W"
-		(grid.plateau[x][y] = "↑") if @heading=="N"
-		(grid.plateau[x][y] = "↓") if @heading=="S"
+		grid.plateau[x][y] = @rover_num.to_s + choose_arrow 
 	end
 end
 
